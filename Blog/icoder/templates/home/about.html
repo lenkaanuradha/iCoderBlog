@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}About{% endblock %}
+{% block aboutactive %}active{% endblock %}
+{% block body %} 
+
+{% for post in posts %}
+<div class="container my-3">
+<div class="row align-items-md-stretch">
+    <div class="h-100 border border-info shadow-lg  col-md-10 p-3 text-bg-dark rounded-3">
+        <h4 class="text-dark text-sm">{{post.author}}</h4>
+        <p> {{post.aboutauthor}}</p>
+       
+      </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

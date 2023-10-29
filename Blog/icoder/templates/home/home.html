@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block title %}Home{% endblock %} 
+{% block homeactive %}active{% endblock %} 
+{% block js %}
+<script>
+  let content=document.getElementsByClassName('content')
+  Array.from(content).forEach((element)=>{
+    element.innerHTML=element.innerText;
+  })
+</script>
+{% endblock %}
+{% block body %}
+<div class="container">
+  <div class="p-4 text-center bg-light border border-dark rounded-3  my-3">
+    <h1 class="text-body-emphasis">Welcome to iCoders</h1>
+    <p class="col-lg-6 mx-auto fs-5 text-muted">
+      This is a custom jumbotron featuring an SVG image at the top, some longer
+      text that wraps early thanks to a responsive class,
+      and a customized call to action. <br>
+      This is a custom jumbotron featuring an SVG image at the top, some longer
+      text that wraps early thanks to a responsive class,
+      and a customized call to action.
+    </p>
+    
+  </div>
+</div>
+<div class="container">
+<h3 class="text-info mt-2">Popular Articles:</h3>
+{% for popular_post in popular_posts %}
+<div class="container my-2">
+  
+  <div class="col-md-8 my-3 ">
+  <div
+    class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+    <div class="col p-4 d-flex flex-column position-static">
+      <strong class="d-inline-block mb-2  text-primary text-primary-emphasis">Article by {{popular_post.author}} <span class="text-warning">({{popular_post.views}}views)</span></strong>
+      <h4 class="mb-0">{{popular_post.title}}</h4>
+      <div class="mb-1 text-body-secondary">{{popular_post.timedate}}</div>
+      <p class="card-text mb-auto "><div class="content"> {{popular_post.content|safe|truncatechars:200}}</div>
+       
+      </p>
+      <div>
+        <a href="/blog/{{popular_post.slug}}" class="btn btn-primary my-2">
+          Continue reading
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endfor %}
+{% endblock %}

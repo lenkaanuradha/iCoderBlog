@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}blogPost{% endblock %}
+{% block body %}
+{% load humanize %}
+<div class="container my-3">
+
+<article class="blog-post">
+    <h2 class="display-5 link-body-emphasis mb-1">{{post.title}}</h2>
+    <p class="blog-post-meta text-info"> <a href="/about" class="text-primary text-dark text-semibold text-decoration-none">{{post.timedate}},</a> by {{post.author}}  <span class="text-warning">({{post.views}} views)</span></p>
+
+    <p>{{post.content|safe}}</p>
+</article>
+</div>
+
+<div class="container">
+    <h2>Comments({{comments.count}})</h2>
+    {% if request.user.is_authenticated %}
+   <form action="/blog/postcomment" method="POST">
+    {% csrf_token %}
+    <div class="container">
+      <span class="text-secondary ">Post comments </span>
+      <div>
+    <input type="text " placeholder="Enter comment here" name="comment" class="border border-secondary p-1 rounded w-100 mt-2">
+    <input type="hidden" name="postsno" value="{{post.sno}}">
+  </div>
+  <input type="hidden" name="parentSno" value="">
+    <input type="submit" class="btn btn-primary mb-1 mt-3" >
+   </form>
+   
+  </div>
+   {% else %}
+   <div class="container">
+     <p>Please login to comment</p>
+   </div>
+   {% endif %}
+   {% for comment in comments %}
+  <div class="row mb-2">
+    <div class="col-md-1  ">
+      <img src="/static/images/pic.jpg" class="rounded mt-3 float-end border border-secondary mx-1 fixed" alt="profilepic" style="width: 40px; height: 40px;">
+    </div>
+    <div class="col-md-11  mt-3 "> <b>{{comment.user}}</b>  <span class="badge bg-secondary">{{comment.timestamp|naturaltime}} </span>
+    <div> {{comment.comment}}.</div> 
+     <div class="reply mx-0">
+      <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#replybox{{comment.sno}}" aria-expanded="false" aria-controls="replybox{{comment.sno}}">
+        Reply
+       </button>
+       
+     <div class="collapse" id="replybox{{comment.sno}}">
+       <div class="card card-body mt-2">
+      
+        <form action="/blog/postcomment" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label  for="reply" class="text-secondary ">Post a reply </label>
+            <input type="text " placeholder="Enter a reply here" name="comment" class="border border-secondary p-1 rounded w-100 mt-2">
+            <input type="hidden" name="parentSno" value="{{comment.sno}}">
+            <div>
+         
+        </div>
+        <input type="hidden" name="postsno" value="{{post.sno}}">
+          <input type="submit" class="btn btn-primary mb-1 mt-3" >
+         </form>
+       
+      </div>
+       </div>
+      
+     </div>
+     <div class="replies my-2">
+      <div class="row my-2">
+     {% for reply in replies %}
+     {% if reply.parent == comment %}
+     <div class="col-md-1">
+      <img src="/static/images/pic.jpg" class="rounded mt-3 float-end border border-secondary  " alt="profilepic" style="width: 35px; height: 35px;">
+     </div>
+     
+        <div class="col-md-11 mt-3"> <b>{{reply.user}}</b> {{reply.comment}} <span class="badge bg-secondary">{{reply.timestamp|naturaltime}} </span></div>
+     {% endif %}
+ {% endfor %}
+</div>
+</div>
+    </div>
+       
+       
+  
+   
+  </div>
+ 
+  
+ {% endfor %}
+
+
+    
+</div>
+{% endblock%}

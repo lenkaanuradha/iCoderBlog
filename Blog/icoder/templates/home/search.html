@@ -1,0 +1,50 @@
+{% extends 'base.html' %} {% block title %}Search results{% endblock %} 
+{% block js %}
+<script>
+  let posts=document.getElementsByClassName('content');
+  Array.from(posts).forEach((element)=>{
+    element.innerHTML=element.innerText;
+  })
+</script>
+{% endblock %}
+{% block body %}
+
+<div class="container my-3">
+  <h2>Search Results:</h2>
+  {% if allposts|length < 1 %}
+  <p>No Results</p>
+  <p>Your search - <b> {{query}}</b>- did not match any documents.</p>
+
+  <p>Suggestions:</p>
+  <ul>
+    <li>Make sure that all words are spelled correctly.</li>
+    <li>Try different keywords.</li>
+    <li>Try more general keywords.</li>
+  </ul>
+  {% endif %}
+  <div class="container my-2">
+    {% for allpost in allposts %}
+    <div class="col-md-6 my-3">
+      <div
+        class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative border border-info"
+      >
+        <div class="col p-3 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary"
+            >Article by-{{allpost.author}}</strong
+          >
+          <h3 class="mb-0 text-primary-emphasis">{{allpost.title}}</h3>
+          <div class="mb-1 text-body-secondary">{{allpost.timedate}}</div>
+          <p class="card-text mb-auto content">{{allpost.content}}</p>
+          <div>
+            <a href="/blog/{{allpost.slug}}" class="btn btn-primary my-2">
+              Continue reading
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% endblock %}
+</div>
